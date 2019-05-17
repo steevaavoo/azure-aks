@@ -21,10 +21,10 @@ az group create --name $AKS_RESOURCE_GROUP --location $LOCATION
 
 # Create AKS using the latest version available
 # AKS cluster name MUST be unique, eg: matthorgan-aks-cluster01
- az aks create --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME --enable-addons monitoring --kubernetes-version $VERSION --generate-ssh-keys --location $LOCATION
+az aks create --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME --enable-addons monitoring --kubernetes-version $VERSION --generate-ssh-keys --location $LOCATION
 
 # Deploy Azure Container Registry (ACR)
-az acr create --resource-group $AKS_RESOURCE_GROUP --name $myacrname --sku Standard --location $LOCATION
+az acr create --resource-group $AKS_RESOURCE_GROUP --name $ACR_NAME --sku Standard --location $LOCATION
 
 
 # Grant AKS-generated Service Principal access to ACR
