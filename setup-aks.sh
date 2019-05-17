@@ -53,3 +53,29 @@ az sql db create -g $AKS_RESOURCE_GROUP -s $SQL_SERVER_NAME -n mhcdb --service-o
 
 # resource group > container registry > Login server name, eg:
 # adamrushukacr01.azurecr.io
+
+
+# Follow steps to update the Build and Release pipelines
+
+# Get the access credentials for the Kubernetes cluster
+# Creds are merged into your current console session, eg:
+# Merged "adamrushuk-aks-cluster01" as current context in /home/adam/.kube/config
+az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
+
+# Show k8s nodes / pods
+kubectl get nodes
+kubectl get pods
+
+# Wait to see the EXTERNAL-IP appear, using --watch
+# Use `Ctrl + C` to cancel
+kubectl get service mhc-front --watch
+
+
+# Access the Kubernetes web dashboard in Azure Kubernetes Service (AKS)
+https://docs.microsoft.com/en-us/azure/aks/kubernetes-dashboard
+
+# You may need to create a ClusterRoleBinding to access the Web GUI properly
+kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
+
+# Start the Kubernetes dashboard
+az aks browse --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
