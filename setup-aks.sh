@@ -7,7 +7,7 @@
 
 # Vars
 # no dashes or spaces allowed in prefix, and MUST be lowercase as some character restrictions for some resources
-UNIQUE_PREFIX="adamrushuk"
+UNIQUE_PREFIX="steevaavoo"
 # Shouldn't need to change anything below
 AKS_CLUSTER_NAME="${UNIQUE_PREFIX}-aks-cluster01"
 ACR_NAME="${UNIQUE_PREFIX}acr01"
@@ -49,17 +49,17 @@ az sql db create -g $AKS_RESOURCE_GROUP -s $SQL_SERVER_NAME -n mhcdb --service-o
 # Check GUI manually for some unique info
 # The following components - Container Registry, Kubernetes Service, SQL Server along with SQL Database are deployed. Access each of these components individually and make a note of the details which will be used in Exercise 1.
 # SQL database > Server name, eg:
-# adamrushukazsqlserver01.database.windows.net
+# steevaavooazsqlserver01.database.windows.net
 
 # resource group > container registry > Login server name, eg:
-# adamrushukacr01.azurecr.io
+# steevaavooacr01.azurecr.io
 
 
 # Follow steps to update the Build and Release pipelines
 
 # Get the access credentials for the Kubernetes cluster
 # Creds are merged into your current console session, eg:
-# Merged "adamrushuk-aks-cluster01" as current context in /home/adam/.kube/config
+# Merged "steevaavoo-aks-cluster01" as current context in /home/adam/.kube/config
 az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
 
 # Show k8s nodes / pods
