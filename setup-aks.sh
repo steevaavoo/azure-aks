@@ -7,6 +7,7 @@
 
 # Vars
 # no dashes or spaces allowed in prefix, and MUST be lowercase as some character restrictions for some resources
+# if you want to check the contents of a variable in BASH, use echo $VARIABLE_NAME
 UNIQUE_PREFIX="steevaavoo"
 # Shouldn't need to change anything below
 AKS_CLUSTER_NAME="${UNIQUE_PREFIX}-aks-cluster01"
@@ -20,10 +21,12 @@ SQL_SERVER_NAME="${UNIQUE_PREFIX}azsqlserver01"
 az group create --name $AKS_RESOURCE_GROUP --location $LOCATION
 
 # Create AKS using the latest version available
-# AKS cluster name MUST be unique, eg: matthorgan-aks-cluster01
+# AKS cluster name MUST be unique, 3 to 31 characters inclusive, must start with letter or number, can contain
+# only letters, numbers or hyphens, eg: steevaavoo-aks-cluster01
 az aks create --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME --enable-addons monitoring --kubernetes-version $VERSION --generate-ssh-keys --location $LOCATION
 
 # Deploy Azure Container Registry (ACR)
+# NOTE: ACR name may contain alpha numeric characters only and must be between 5 and 50 characters
 az acr create --resource-group $AKS_RESOURCE_GROUP --name $ACR_NAME --sku Standard --location $LOCATION
 
 
@@ -43,12 +46,15 @@ az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 az sql server create -l $LOCATION -g $AKS_RESOURCE_GROUP -n $SQL_SERVER_NAME -u sqladmin -p P2ssw0rd1234
 
 # Create a database
+# Important: Enter a unique SQL server name. Since the Azure SQL Server name does not support UPPER / Camel casing
+# naming conventions, use lowercase for the DB Server Name field value.
 az sql db create -g $AKS_RESOURCE_GROUP -s $SQL_SERVER_NAME -n mhcdb --service-objective S0
 
 
 # Check GUI manually for some unique info
-# The following components - Container Registry, Kubernetes Service, SQL Server along with SQL Database are deployed. Access each of these components individually and make a note of the details which will be used in Exercise 1.
-# SQL database > Server name, eg:
+# The following components - Container Registry, Kubernetes Service, SQL Server along with SQL Database are deployed.
+# Access each of these components individually and make a note of the details which will be used in Exercise 1.
+# SQL database > mhcdb Database > Server name, eg:
 # steevaavooazsqlserver01.database.windows.net
 
 # resource group > container registry > Login server name, eg:
@@ -79,3 +85,8 @@ kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-adm
 
 # Start the Kubernetes dashboard
 az aks browse --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
+
+# Cleanup
+# Use PowerShell:
+# Get-AzResourceGroup | Remove-AzResourceGroup -AsJob -Force
+# Get-Job | Wait-Job
